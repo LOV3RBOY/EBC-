@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "POSTGRES_URL": "postgres://postgres.udtkhmgsukvkrvizekrp:EVkFVgl1AuNgn3OD@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x",
+    "POSTGRES_PRISMA_URL": "postgres://postgres.udtkhmgsukvkrvizekrp:EVkFVgl1AuNgn3OD@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x",
+    "POSTGRES_URL_NON_POOLING": "postgres://postgres.udtkhmgsukvkrvizekrp:EVkFVgl1AuNgn3OD@aws-0-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require",
+    "POSTGRES_USER": "postgres",
+    "POSTGRES_PASSWORD": "EVkFVgl1AuNgn3OD",
+    "POSTGRES_DATABASE": "postgres",
+    "POSTGRES_HOST": "db.udtkhmgsukvkrvizekrp.supabase.co",
+    "SUPABASE_URL": "https://udtkhmgsukvkrvizekrp.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_URL": "https://udtkhmgsukvkrvizekrp.supabase.co",
+    "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkdGtobWdzdWt2a3J2aXpla3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1ODcxMzgsImV4cCI6MjA1ODE2MzEzOH0.Q6zEV4_ihClyuGayQbR2r0sT79Xrs2RYAaTXBZrRz44",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkdGtobWdzdWt2a3J2aXpla3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1ODcxMzgsImV4cCI6MjA1ODE2MzEzOH0.Q6zEV4_ihClyuGayQbR2r0sT79Xrs2RYAaTXBZrRz44",
+    "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkdGtobWdzdWt2a3J2aXpla3JwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0MjU4NzEzOCwiZXhwIjoyMDU4MTYzMTM4fQ.iIRBJft83niftatHnl2BAasdpwLzbQ9ZhyNQYj0EWxg",
+    "SUPABASE_JWT_SECRET": "1fs/KBGUOVR9vS6AyODfXpt8qS2ycDT04Mq++u8Z79xpah8u1qnjhV7DJ8CUYJOIkkhB512btcjNl++Q5495vg=="
+  }
+}
+

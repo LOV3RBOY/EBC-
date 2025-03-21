@@ -1,0 +1,13 @@
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/encore_media_hub"
+
+# Vercel Blob Storage
+BLOB_READ_WRITE_TOKEN="your_vercel_blob_token"
+
+# Authentication (if using NextAuth.js)
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your_nextauth_secret"
+
+# Optional: Analytics, Error Logging, etc.
+NEXT_PUBLIC_ANALYTICS_ID="your_analytics_id"
+
