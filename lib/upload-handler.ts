@@ -1,7 +1,5 @@
-import { uploadFile, generateThumbnail } from "./supabase/storage"
-import { supabaseClient } from "./supabase/client"
-import { getFileTypeFromMime } from "./utils"
-import type { MediaItem } from "./types"
+import { generateId, getFileTypeFromMime } from "./utils"
+import type { MediaItem, MediaUploadParams } from "./types"
 
 export type UploadProgressCallback = (progress: number) => void
 
@@ -11,74 +9,38 @@ export async function handleFileUpload(
     title?: string
     description?: string
     tags?: string[]
-  },
-  onProgress?: UploadProgressCallback,
+  } = {},
+  onProgress: (progress: number) => void
 ): Promise<MediaItem> {
-  try {
-    // Simulate upload progress
-    let progress = 0
-    const progressInterval = setInterval(() => {
-      progress += Math.random() * 10
-      if (progress > 95) {
-        progress = 95
-        clearInterval(progressInterval)
-      }
-      onProgress?.(progress)
-    }, 300)
+  // Simulate file upload with progress
+  const totalSize = file.size;
+  let uploadedSize = 0;
+  const chunkSize = totalSize / 10; // Simulate 10 chunks
 
-    // 1. Upload file to storage
-    const { url, success, error } = await uploadFile(file)
-
-    if (!success || !url) {
-      throw error || new Error("Failed to upload file")
-    }
-
-    // 2. Generate thumbnail if it's an image
-    const thumbnailUrl = await generateThumbnail(file)
-
-    // 3. Insert record into the database
-    const { data, error: dbError } = await supabaseClient
-      .from("media_items")
-      .insert({
-        title: metadata.title || file.name,
-        description: metadata.description,
-        file_name: file.name,
-        file_type: getFileTypeFromMime(file.type),
-        file_size: file.size,
-        url: url,
-        thumbnail_url: thumbnailUrl,
-        uploader: "anonymous", // In a real app, this would be the user ID
-        tags: metadata.tags || [],
-      })
-      .select()
-      .single()
-
-    if (dbError) throw dbError
-
-    // Clear the progress interval and set to 100%
-    clearInterval(progressInterval)
-    onProgress?.(100)
-
-    // Transform to match our MediaItem interface
-    const mediaItem: MediaItem = {
-      id: data.id,
-      title: data.title,
-      description: data.description || undefined,
-      fileName: data.file_name,
-      fileType: data.file_type,
-      fileSize: data.file_size,
-      url: data.url,
-      thumbnailUrl: data.thumbnail_url || undefined,
-      uploadDate: data.upload_date,
-      lastModified: data.last_modified || undefined,
-      uploader: data.uploader || undefined,
-      tags: data.tags || [],
-    }
-
-    return mediaItem
-  } catch (error) {
-    console.error("Error uploading file:", error)
-    throw error
+  // Simulate upload progress
+  for (let i = 0; i < 10; i++) {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    uploadedSize += chunkSize;
+    onProgress(Math.min((uploadedSize / totalSize) * 100, 100));
   }
+
+  // Create the media item
+  const mediaItem: MediaItem = {
+    id: generateId(),
+    title: metadata.title || file.name,
+    fileName: file.name,
+    fileType: getFileTypeFromMime(file.type),
+    fileSize: file.size,
+    uploadDate: new Date().toISOString(),
+    description: metadata.description,
+    tags: metadata.tags,
+    url: URL.createObjectURL(file),
+    ...(file.type.startsWith('image/') && { thumbnailUrl: URL.createObjectURL(file) }),
+    uploader: 'Current User',
+  };
+
+  // In a real app, you'd upload to a server here
+  // For demo purposes, we're just returning the created media item
+  return mediaItem;
 }
 

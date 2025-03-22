@@ -15,7 +15,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { useToast } from "@/components/ui/use-toast"
 import NoiseTexture from "@/components/noise-texture"
-import { useMediaStore } from "@/lib/stores/media-store"
 import { cn } from "@/lib/utils"
 import AppLayout from "@/components/layouts/app-layout"
 
@@ -25,7 +24,6 @@ import { handleFileUpload } from "@/lib/upload-handler"
 export default function MediaUploadPage() {
   const router = useRouter()
   const { toast } = useToast()
-  const { uploadMedia } = useMediaStore()
   const [files, setFiles] = useState<File[]>([])
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -37,6 +35,7 @@ export default function MediaUploadPage() {
   const [errors, setErrors] = useState<{ title?: string }>({})
   const fileInputRef = useRef<HTMLInputElement>(null)
   const dropZoneRef = useRef<HTMLDivElement>(null)
+  const [objectUrls, setObjectUrls] = useState<string[]>([])
 
   // Reset form when navigating away
   useEffect(() => {
@@ -52,8 +51,11 @@ export default function MediaUploadPage() {
       setUploadProgress(0)
       setIsDragging(false)
       setErrors({})
+      
+      // Clean up object URLs to prevent memory leaks
+      objectUrls.forEach(url => URL.revokeObjectURL(url))
     }
-  }, [])
+  }, [objectUrls])
 
   const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -136,7 +138,9 @@ export default function MediaUploadPage() {
   const getFilePreview = (file: File) => {
     const type = file.type.split("/")[0]
     if (type === "image") {
-      return URL.createObjectURL(file)
+      const url = URL.createObjectURL(file)
+      setObjectUrls(prev => [...prev, url])
+      return url
     }
     return null
   }
@@ -151,9 +155,7 @@ export default function MediaUploadPage() {
 
   const validateForm = () => {
     const newErrors: { title?: string } = {}
-
-    // Title is now optional, so no validation needed
-
+    // Title is optional, so no validation needed
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -196,6 +198,7 @@ export default function MediaUploadPage() {
       toast({
         title: "Upload successful",
         description: `${files.length} file${files.length > 1 ? "s" : ""} uploaded successfully.`,
+        variant: "default",
       })
 
       // Redirect to media page after successful upload

@@ -50,10 +50,27 @@ export default function MediaList({ items }: MediaListProps) {
   const handleDownload = (item: MediaItem, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    toast({
-      title: "Download started",
-      description: `Downloading ${item.title}...`,
-    })
+    
+    // Create an anchor element and trigger the download
+    if (item.url) {
+      const a = document.createElement("a")
+      a.href = item.url
+      a.download = item.fileName || item.title
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      
+      toast({
+        title: "Download started",
+        description: `Downloading ${item.title}...`,
+      })
+    } else {
+      toast({
+        title: "Download failed",
+        description: "The file URL is not available.",
+        variant: "destructive",
+      })
+    }
   }
 
   return (
@@ -198,4 +215,3 @@ export default function MediaList({ items }: MediaListProps) {
     </div>
   )
 }
-

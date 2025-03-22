@@ -75,11 +75,27 @@ export default function MediaDetailPage() {
 
   const handleDownload = () => {
     if (!mediaItem) return
-
-    toast({
-      title: "Download started",
-      description: `Downloading ${mediaItem.title}...`,
-    })
+    
+    // Create an anchor element and trigger the download
+    if (mediaItem.url) {
+      const a = document.createElement("a")
+      a.href = mediaItem.url
+      a.download = mediaItem.fileName || mediaItem.title
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      
+      toast({
+        title: "Download started",
+        description: `Downloading ${mediaItem.title}...`,
+      })
+    } else {
+      toast({
+        title: "Download failed",
+        description: "The file URL is not available.",
+        variant: "destructive",
+      })
+    }
   }
 
   const handleShare = () => {
@@ -611,4 +627,3 @@ export default function MediaDetailPage() {
     </AppLayout>
   )
 }
-

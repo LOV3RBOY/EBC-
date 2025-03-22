@@ -1,16 +1,16 @@
 export interface MediaItem {
   id: string
   title: string
-  description?: string
-  fileName: string
+  fileName?: string
   fileType: string
   fileSize: number
-  url: string
-  thumbnailUrl?: string
   uploadDate: string
-  lastModified?: string
-  uploader?: string
+  description?: string
   tags?: string[]
+  url?: string
+  thumbnailUrl?: string
+  uploader?: string
+  lastModified?: string
 }
 
 export interface MediaUploadParams {
@@ -24,5 +24,7 @@ export interface MediaUpdateParams {
   title?: string
   description?: string
   tags?: string[]
+  url?: string
+  thumbnailUrl?: string
 }
 
